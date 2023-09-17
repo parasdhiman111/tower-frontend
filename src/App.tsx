@@ -1,26 +1,23 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Navbar from './components/Navbar/Navbar'; // Update the import path
+import Menu from './components/Menu/Menu'; // Update the import path
+import RegisterCardForm from './components/RegisterCardForm/RegisterCardForm'; // Update the import path
 import './App.css';
 
 function App() {
+  const [menuOpen, setMenuOpen] = useState<boolean>(false);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div className="App">
+        <Navbar menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
+        <Routes>
+          <Route path="/" element={<RegisterCardForm menuOpen={menuOpen} />} />
+        </Routes>
+        <Menu menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
+      </div>
+    </Router>
   );
 }
-
 export default App;
