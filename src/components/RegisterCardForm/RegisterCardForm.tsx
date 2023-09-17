@@ -2,6 +2,9 @@ import React, { useState, ChangeEvent, FormEvent } from 'react';
 import SubmitButton from '../SubmitButton/SubmitButton';
 import './RegisterCardForm.css';
 
+
+const API_URL = 'https://localhost:7040/api';
+
 interface RegisterCardFormProps {
   menuOpen: boolean;
 }
@@ -77,11 +80,31 @@ function RegisterCardForm({menuOpen}: RegisterCardFormProps) {
       console.log('Credit Card:', creditCard);
       console.log('CVC:', cvc);
       console.log('Expires:', expiryDate);
+      await sendFormDataToBackend('TestUser');
     } else {
       alert('Please fill in valid information before submitting.');
     }
   };
 
+  const sendFormDataToBackend = async (name: string): Promise<void> => {
+    try {
+      const response = await fetch(`${API_URL}/cards`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name, creditCard, cvc, expiryDate }),
+      });
+      if (response.ok) {
+        alert('Card registered successfully!');
+      } else {
+        alert('Card registration failed. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('An error occurred. Please try again later.');
+    }
+  };
 
   return (
     <div className={`form-container ${menuOpen ? 'menu-open' : ''}`}>
