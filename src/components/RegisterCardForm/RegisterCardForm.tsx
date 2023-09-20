@@ -1,6 +1,7 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
 import SubmitButton from '../SubmitButton/SubmitButton';
 import './RegisterCardForm.css';
+import Encrypt from '../../security/Encrypt'; // Import the encryption utility
 
 
 const API_URL = 'https://localhost:7040/api';
@@ -88,12 +89,20 @@ function RegisterCardForm({menuOpen}: RegisterCardFormProps) {
 
   const sendFormDataToBackend = async (name: string): Promise<void> => {
     try {
+
+        var request = {
+          name:name,
+          creditCard,
+          cvc,
+          expiryDate
+        };
+
       const response = await fetch(`${API_URL}/cards`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name, creditCard, cvc, expiryDate }),
+        body: JSON.stringify(Encrypt(JSON.stringify(request))),
       });
       if (response.ok) {
         alert('Card registered successfully!');
